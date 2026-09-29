@@ -1,0 +1,2 @@
+# This file keeps the logs/ directory in git.
+# logs.txt is written here by the worker and is gitignored.

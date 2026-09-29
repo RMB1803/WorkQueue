@@ -1,0 +1,32 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  producer:
+    build: .
+    command: python cmd/producer/main.py
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - PORT_PRODUCER=8000
+    depends_on:
+      - redis
+
+  worker:
+    build: .
+    command: python cmd/worker/main.py
+    ports:
+      - "8001:8001"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - PORT_WORKER=8001
+    volumes:
+      - worker-logs:/app/logs
+    depends_on:
+      - redis
+
+volumes:
+  worker-logs:
